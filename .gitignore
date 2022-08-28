@@ -1,3 +1,4 @@
 .idea
 alertmanager-webhook-logger
 *.code-workspace
+.vscode

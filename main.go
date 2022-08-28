@@ -19,6 +19,7 @@ package main
 import (
 	"encoding/json"
 	"flag"
+	"fmt"
 	errorLog "log"
 	"net/http"
 	"os"
@@ -52,14 +53,18 @@ func main() {
 		Logger: logger,
 	})
 
-        if *tls {
+	http.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintln(w, "healthy!")
+	})
+
+	if *tls {
 		if err := http.ListenAndServeTLS(*address, *tlsCertPath, *tlsKeyPath, nil); err != nil {
 			errorLog.Fatalf("failed to start https server: %v", err)
-                }
-        } else {
+		}
+	} else {
 		if err := http.ListenAndServe(*address, nil); err != nil {
 			errorLog.Fatalf("failed to start http server: %v", err)
-                }
+		}
 	}
 }
 
